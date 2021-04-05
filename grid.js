@@ -10,16 +10,21 @@ export class MusicGridCell extends EventTarget{
         this.div.addEventListener("click", () => this._toggleSelected())
     }
 
+    select(){
+        this.div.classList.remove("bg-blue-300")
+        this.div.classList.add("bg-blue-500")
+        this.selected = true;
+    }
+
+    unselect(){
+        this.div.classList.remove("bg-blue-500")
+        this.div.classList.add("bg-blue-300")
+        this.selected = false;
+    }
+
     _toggleSelected(){
-        if(this.selected){
-            this.div.classList.remove("bg-blue-500")
-            this.div.classList.add("bg-blue-300")
-            this.selected = false;
-        } else{
-            this.div.classList.remove("bg-blue-300")
-            this.div.classList.add("bg-blue-500")
-            this.selected = true;
-        }
+        if(this.selected) this.unselect()
+        else this.select()
     }
 
     remove(){
@@ -81,6 +86,16 @@ export class MusicGridColumn extends EventTarget{
     remove(){
         for(let cell of this.cells) cell.remove()
     }
+
+    /**
+     * sets the selections from a 1d array of boolean values
+     */
+    setSelectionsFromArray(boolArr){
+        for(let i=0; i<boolArr.length; i++){
+            const val = boolArr[i]
+            if(val) this.cells[i].select()
+        }
+    }
 }
 
 export class MusicGrid extends EventTarget{
@@ -133,5 +148,14 @@ export class MusicGrid extends EventTarget{
         Tone.Transport.clear(this.playingId)
         this.playing = false;
         this.playingId = null;
+    }
+
+    // sets the selections from a 2d array, where the 2nd dimension contains
+    // booleans
+    setSelectionsFromArray(booleanArr){
+        for(let i=0; i<booleanArr.length; i++){
+            const columnVals = booleanArr[i]
+            this.cells[i].setSelectionsFromArray(columnVals)
+        }
     }
 }

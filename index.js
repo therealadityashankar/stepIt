@@ -16,7 +16,24 @@ grid.addEventListener("playing-cell", ({detail}) => {
     synthD.synth.triggerAttackRelease(synthD.note, grid.playRate);
 })
 
-playbtn.addEventListener("click", e => {
+grid.setSelectionsFromArray([
+    [false, false, false, false, false, false, true],
+    [false, false, false, false, false, true, false],
+    [false, false, false, false, true, false, false],
+    [false, false, false, false, false, true, false],
+    [false, false, false, false, true, false, false],
+    [false, false, false, false, false, true, false],
+    [false, false, false, false, true, false, false],
+    [false, false, false, true, false, false, false],
+    [false, false, true, false, false, false, false],
+    [false, false, false, true, false, false, false],
+    [false, false, false, false, true, false, false],
+    [false, false, false, true, false, false, false],
+    [false, true, false, false, false, false, false],
+    [true, false, false, false, false, false, false]
+])
+
+playbtn.addEventListener("click", () => {
     if(grid.playing) {
         playbtn.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAABKUlEQVR4nO3ara0CQRTF8T9P4LAU8AwWFDVAgsTSBnXQAi2Q0AMdgMGh0U+8LIZJEAQYZmfuzsz5JVducveIPfsFIiIiIiIiEmQMTKyXsLQE/oEtMDTexcQSaO5zBdZA33SjxB4DcHMEZpZLpfQsADc74NdutTReBdAAf8AGGFgtGNu7ANxcgBXQs1kznk8DcHMApiabRuIbQENhtflNAEXVZkgARdRmGwFkXZttBpBlbbYdQHa1GSuAbGozdgANHa/NFAG46WRtpgzATXBt/oQc3AEjYE9AbeYeQLDcAzgBc2ABnI130UVQNUjck6/2RqjaW+GqH4aqfRyu9oVIJ2vNl16KUlit+dKHEQqrNV/6OEphteZLP0hQWK35qv4nKRERERERkWzcAEEJ/TQ0drPAAAAAAElFTkSuQmCC"
         grid.stop()
