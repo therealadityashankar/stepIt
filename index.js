@@ -1,9 +1,33 @@
 import {MusicGrid} from "./grid.js";
 
 const gridRows = 7;
+const optionsDiv = document.getElementById("options")
 const playbtn = document.getElementById("play-btn")
 const synths = []
 const labels = []
+const synthPossiblities = ["Synth", "AMSynth", "DuoSynth", "FMSynth", "MembraneSynth", "MetalSynth", "MonoSynth", "NoiseSynth", "PluckSynth"]
+
+function addSynthPossibilities(){
+    const currSynth = "Synth";
+
+    for(let poss of synthPossiblities){
+        const inp = document.createElement("input")
+        inp.type = "button"
+        inp.classList.add("rounded", "cursor-pointer", "py-1", "px-2", "bg-green-300", "hover:bg-green-400", "my-2")
+        inp.value = poss;
+        optionsDiv.appendChild(inp)
+
+        inp.addEventListener("click", () => {
+            while(synths.length) synths.pop()
+
+            for(let i=0; i<gridRows; i++){
+                const note = "ABCDEFG"[i] + 5;
+                const synth = new Tone[poss]().toDestination(); 
+                synths.push({synth, note});
+            }
+        })
+    }
+}
 
 for(let i=0; i<gridRows; i++){
     const note = "ABCDEFG"[i] + 5;
@@ -47,4 +71,4 @@ playbtn.addEventListener("click", () => {
     }
 })
 
-
+addSynthPossibilities()

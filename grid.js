@@ -127,7 +127,7 @@ export class MusicGrid extends EventTarget{
         this.columns = columns
         this.rows = rows
         this.element.setAttribute("class", "");
-        this.element.classList.add("flex", "flex-row", "p-2", "bg-red-300", "w-min", "m-2", "rounded")
+        this.element.classList.add("flex", "flex-row", "mt-4", "rounded", "bg-red-300")
         this.element.appendChild(this._createRowHeadersElement())
 
         for(let column of this.cells) column.remove()
