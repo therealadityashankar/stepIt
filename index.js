@@ -1,15 +1,18 @@
 import {MusicGrid} from "./grid.js";
 
-const grid = new MusicGrid("#play-area", 14, 7)
+const gridRows = 7;
 const playbtn = document.getElementById("play-btn")
 const synths = []
+const labels = []
 
-for(let i=0; i<grid.rows; i++){
-    synths.push({
-        synth : new Tone.AMSynth().toDestination(),
-        note : "ABCDEFG"[i] + 5
-    });
+for(let i=0; i<gridRows; i++){
+    const note = "ABCDEFG"[i] + 5;
+    const synth = new Tone.AMSynth().toDestination(); 
+    synths.push({synth, note});
+    labels.push(note)
 }
+
+const grid = new MusicGrid("#play-area", 14, gridRows, {labels})
 
 grid.addEventListener("playing-cell", ({detail}) => {
     const synthD = synths[detail.cell.cellNum]

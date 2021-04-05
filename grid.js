@@ -99,8 +99,18 @@ export class MusicGridColumn extends EventTarget{
 }
 
 export class MusicGrid extends EventTarget{
-    constructor(element, columns, rows){
+    constructor(element, columns, rows, opts){
         super()
+        opts = opts||{}
+
+        if(!opts.labels){
+            opts.labels = []
+            for(let i=0; i<rows; i++){
+                opts.labels.push(`row - ${i+1}`)
+            }
+        }
+
+        this.labels = opts.labels;
         this.element = document.querySelector(element);
         this.cells = []
         this.playing = false
@@ -118,6 +128,7 @@ export class MusicGrid extends EventTarget{
         this.rows = rows
         this.element.setAttribute("class", "");
         this.element.classList.add("flex", "flex-row", "p-2", "bg-red-300", "w-min", "m-2", "rounded")
+        this.element.appendChild(this._createRowHeadersElement())
 
         for(let column of this.cells) column.remove()
 
@@ -127,6 +138,18 @@ export class MusicGrid extends EventTarget{
             this.element.appendChild(column.element)
             this.cells.push(column);
         }
+    }
+
+    _createRowHeadersElement(){
+        const el = document.createElement("div");
+        el.classList.add("rounded", "bg-green-200", "m-2", "w-max")
+        for(let header of this.labels){
+            let hel = document.createElement("div")
+            hel.classList.add("rounded", "bg-yellow-200", "m-2", "p-1", "px-2")
+            hel.innerText = header;
+            el.appendChild(hel)
+        }
+        return el;
     }
 
     play(){
