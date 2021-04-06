@@ -10,7 +10,7 @@ const setBeatSelection = (curr) => {
             {synth : new Tone.FMSynth().toDestination(), note : "C5"},
         ]
         
-        const labels = ["Soft Beep", "Cymbal", "Drum", "Snare", "Percussion", "String", "voilenish"]
+        const labels = ["Soft Beep", "Cymbal", "Drum", "Snare", "Percussion", "String", "Violenish"]
 
         return [synths, labels]
     }
