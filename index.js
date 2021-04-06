@@ -1,64 +1,59 @@
 import {MusicGrid} from "./grid.js";
+import setBeatSelection from "./customBeatSelections.js";
+import "./options.js"
+
+Tone.setContext(new Tone.Context({ latencyHint : "playback" }))
 
 const gridRows = 7;
-const optionsDiv = document.getElementById("options")
 const playbtn = document.getElementById("play-btn")
-const synths = []
-const labels = []
-const synthPossiblities = ["Synth", "AMSynth", "DuoSynth", "FMSynth", "MembraneSynth", "MetalSynth", "MonoSynth", "NoiseSynth", "PluckSynth"]
+const optionsList = document.querySelector("options-list")
+const synthList = ["Synth", "AMSynth", "DuoSynth", "FMSynth", "MembraneSynth", 
+                   "MetalSynth", "MonoSynth", "NoiseSynth", "PluckSynth"]
+const customBeatList = ["Beat selection 1"]
+const grid = new MusicGrid("#play-area", 14, gridRows)
+let synths = []
 
-function addSynthPossibilities(){
-    const currSynth = "Synth";
-
-    for(let poss of synthPossiblities){
-        const inp = document.createElement("input")
-        inp.type = "button"
-        inp.classList.add("rounded", "cursor-pointer", "py-1", "px-2", "bg-green-300", "hover:bg-green-400", "my-2")
-        inp.value = poss;
-        optionsDiv.appendChild(inp)
-
-        inp.addEventListener("click", () => {
-            while(synths.length) synths.pop()
-
-            for(let i=0; i<gridRows; i++){
-                const note = "ABCDEFG"[i] + 5;
-                const synth = new Tone[poss]().toDestination(); 
-                synths.push({synth, note});
-            }
-        })
+optionsList.addEventListener("selection-changed", ({detail}) => {
+    while(synths.length){
+        const synthD = synths.pop()
+        synthD.synth.dispose()
     }
-}
 
-for(let i=0; i<gridRows; i++){
-    const note = "ABCDEFG"[i] + 5;
-    const synth = new Tone.AMSynth().toDestination(); 
-    synths.push({synth, note});
-    labels.push(note)
-}
+    let labels = [];
+    if(synthList.includes(detail.currSelection)){
+        for(let i=0; i<gridRows; i++){
+            const note = "ABCDEFG"[i] + 5;
+            const synth = new Tone[detail.currSelection]().toDestination(); 
+            synths.push({synth, note});
+            labels.push(note)
+        }
+    } else if(customBeatList.includes(detail.currSelection)){
+        [synths, labels] = setBeatSelection(detail.currSelection) 
+    } else{
+        throw console.error(`invalid option ${detail.currSelection}, contact the developer`)
+    }
 
-const grid = new MusicGrid("#play-area", 14, gridRows, {labels})
+    grid.setHeaders(labels)
+})
 
 grid.addEventListener("playing-cell", ({detail}) => {
     const synthD = synths[detail.cell.cellNum]
-    synthD.synth.triggerAttackRelease(synthD.note, grid.playRate);
+    if(synthD.synth instanceof Tone.NoiseSynth)  synthD.synth.triggerAttackRelease(grid.playRate, detail.attime)
+    else synthD.synth.triggerAttackRelease(synthD.note, grid.playRate, detail.attime);
 })
 
-grid.setSelectionsFromArray([
-    [false, false, false, false, false, false, true],
-    [false, false, false, false, false, true, false],
-    [false, false, false, false, true, false, false],
-    [false, false, false, false, false, true, false],
-    [false, false, false, false, true, false, false],
-    [false, false, false, false, false, true, false],
-    [false, false, false, false, true, false, false],
-    [false, false, false, true, false, false, false],
-    [false, false, true, false, false, false, false],
-    [false, false, false, true, false, false, false],
-    [false, false, false, false, true, false, false],
-    [false, false, false, true, false, false, false],
-    [false, true, false, false, false, false, false],
-    [true, false, false, false, false, false, false]
-])
+const defSound = [];
+
+for(let i=0; i<grid.columns; i++){
+    const row = [];
+    for(let j=0; j<gridRows; j++){
+        if((i%gridRows) == j) row.push(true)
+        else row.push(false)
+    }
+    defSound.push(row)
+}
+
+grid.setSelectionsFromArray(defSound)
 
 playbtn.addEventListener("click", () => {
     if(grid.playing) {
@@ -71,4 +66,4 @@ playbtn.addEventListener("click", () => {
     }
 })
 
-addSynthPossibilities()
+optionsList.select("Beat selection 1")

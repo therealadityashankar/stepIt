@@ -11,14 +11,14 @@ export class MusicGridCell extends EventTarget{
     }
 
     select(){
-        this.div.classList.remove("bg-blue-300")
+        this.div.classList.remove("bg-blue-300", "hover:bg-blue-400")
         this.div.classList.add("bg-blue-500")
         this.selected = true;
     }
 
     unselect(){
         this.div.classList.remove("bg-blue-500")
-        this.div.classList.add("bg-blue-300")
+        this.div.classList.add("bg-blue-300", "hover:bg-blue-400")
         this.selected = false;
     }
 
@@ -112,6 +112,7 @@ export class MusicGrid extends EventTarget{
 
         this.labels = opts.labels;
         this.element = document.querySelector(element);
+        this.headers = []
         this.cells = []
         this.playing = false
         this.playingId = null
@@ -148,8 +149,17 @@ export class MusicGrid extends EventTarget{
             hel.classList.add("rounded", "bg-yellow-200", "m-2", "p-1", "px-2")
             hel.innerText = header;
             el.appendChild(hel)
+            this.headers.push({el:hel})
         }
         return el;
+    }
+
+    setHeaders(labels){
+        this.labels = labels
+        for(let i=0; i<this.headers.length; i++){
+            const headD = this.headers[i]
+            headD.el.innerText = this.labels[i]
+        }
     }
 
     play(){
