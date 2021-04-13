@@ -19,12 +19,14 @@ export default class MusicGridCell extends EventTarget{
         this.div.classList.remove("bg-blue-300", "hover:bg-blue-400")
         this.div.classList.add("bg-blue-500")
         this.selected = true;
+        this.dispatchEvent(new CustomEvent("selected"));
     }
 
     unselect(){
         this.div.classList.remove("bg-blue-500")
         this.div.classList.add("bg-blue-300", "hover:bg-blue-400")
         this.selected = false;
+        this.dispatchEvent(new CustomEvent("unselected"));
     }
 
     _toggleSelected(){
