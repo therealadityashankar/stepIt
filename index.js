@@ -1,8 +1,6 @@
-import {MusicGrid} from "./grid.js";
+import {MusicGrid, MusicGridRow} from "./MusicGrid/index.js";
 import setBeatSelection from "./customBeatSelections.js";
 import "./options.js"
-
-Tone.setContext(new Tone.Context({ latencyHint : "playback" }))
 
 const gridRows = 7;
 const playbtn = document.getElementById("play-btn")
@@ -10,7 +8,8 @@ const optionsList = document.querySelector("options-list")
 const synthList = ["Synth", "AMSynth", "DuoSynth", "FMSynth", "MembraneSynth", 
                    "MetalSynth", "MonoSynth", "NoiseSynth", "PluckSynth"]
 const customBeatList = ["Beat selection 1"]
-const grid = new MusicGrid("#play-area", 14, gridRows)
+const grid = new MusicGrid("#play-area")
+window.grid = grid;
 let synths = []
 
 optionsList.addEventListener("selection-changed", ({detail}) => {
@@ -33,7 +32,11 @@ optionsList.addEventListener("selection-changed", ({detail}) => {
         throw console.error(`invalid option ${detail.currSelection}, contact the developer`)
     }
 
-    grid.setHeaders(labels)
+    grid.clear()
+
+    for(let label of labels){
+        grid.push(new MusicGridRow(label))
+    }
 })
 
 grid.addEventListener("playing-cell", ({detail}) => {
@@ -41,19 +44,6 @@ grid.addEventListener("playing-cell", ({detail}) => {
     if(synthD.synth instanceof Tone.NoiseSynth)  synthD.synth.triggerAttackRelease(grid.playRate, detail.attime)
     else synthD.synth.triggerAttackRelease(synthD.note, grid.playRate, detail.attime);
 })
-
-const defSound = [];
-
-for(let i=0; i<grid.columns; i++){
-    const row = [];
-    for(let j=0; j<gridRows; j++){
-        if((i%gridRows) == j) row.push(true)
-        else row.push(false)
-    }
-    defSound.push(row)
-}
-
-grid.setSelectionsFromArray(defSound)
 
 playbtn.addEventListener("click", () => {
     if(grid.playing) {
