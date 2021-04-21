@@ -1,11 +1,13 @@
 import MusicGridCell from "./cell.js"
 
-export default class MusicGridRow{
+export default class MusicGridRow extends EventTarget{
     constructor(label){
+        super()
         this.label = label
         this.grid = null;
         this.playing = false;
         this.beatRate = "4n";
+        this.gridData = {}
         this._cells = []
         this._createUIElements()
     }
@@ -73,9 +75,26 @@ export default class MusicGridRow{
      */
     dispose(){
         this.elements.div.remove()
+        this.dispatchEvent(new CustomEvent("dispose"))
     }
 
     _setGridEventListener(){
         this.grid.addEventListener("size-change", () => this._setGridPopulateCells())
+    }
+
+    async _rowRecordThingy(){
+        this.dispatchEvent(new CustomEvent("record-mode"))
+        let currentCell = 0;
+
+        await new Promise(resolve => {
+            Tone.Transport.scheduleRepeat(time => {
+                let cell = this.cells[currentCell];
+                if(!cell) resolve();                
+                if(cell.selected){
+                    this.dispatchEvent(new CustomEvent("play"))
+                }
+                currentCell += 1;
+            }, this.beatRate)
+        })
     }
 }
