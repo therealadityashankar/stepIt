@@ -1,0 +1,32 @@
+:root{
+  --color-1: white;
+  --color-2: black;
+  --color-3: #0D1F22;
+  --color-4: #3C5233;
+  --color-5: #6F732F;
+  --color-6: #B38A58;
+  --color-7: #ffeaeeff;
+  --color-8: #7f675bff;
+  --color-9: #0075f2ff;
+  --color-10: #00f2f2ff;
+  --color-11: #096b72ff;
+
+  --font-1: 'Comfortaa', cursive;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}

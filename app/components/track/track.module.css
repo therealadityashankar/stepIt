@@ -1,0 +1,55 @@
+.track{
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.track h2{
+    font-family: var(--font-1);
+    font-weight: 400;
+    width: 100px;
+    margin: 0;
+    text-align: right;
+    font-size: 1rem;
+}
+
+.musicNote, .musicSpace{
+    width: max-content;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    height: 100%;
+}
+
+.noteShower{
+    height: 20px;
+    background: var(--color-9);
+    transition: all 0.3s;
+}
+
+.musicSpace .noteShower{
+    background: var(--color-2);
+    opacity: 0.2;
+}
+
+.musicNote:hover .noteShower, .musicSpace:hover .noteShower{
+    background: var(--color-6);
+    opacity: 1;
+}
+
+.musicNotes{
+    width: max-content;
+    display: flex;
+    align-items: center;
+    border-radius: 25px;
+    height: max-content;
+    margin: 0 15px;
+}
+
+.musicThingyOptions{
+    position: absolute;
+    background: var(--color-6);
+    border-radius: 0 20px 20px 20px;
+    z-index: 1;
+    transition: opacity 0.2s;
+}
